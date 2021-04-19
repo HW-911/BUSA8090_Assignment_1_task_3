@@ -1,0 +1,34 @@
+# BUSA8090 Assignment 1 task 3 - Question 2
+
+# 2a
+use compbiol;
+select LastName, FirstName, MemberID from Member
+where Coach is NULL;
+
+# 2b
+use compbiol;
+select LastName, FirstName, MemberID,YEAR(JoinDate) from Member
+where YEAR(JoinDate) ='2013';
+
+# 2c
+use compbiol;
+select m.LastName, m.FirstName,  e.MemberID, e.Year
+from Entry e
+Inner JOIN Member m ON e.MemberID=m.MemberID
+where e.MemberID Not IN (select MemberID from Entry where Year=2013);
+
+
+# 2d
+use compbiol;
+create view IDs As
+select distinct MemberID, Year
+from Entry e 
+where e.Year IN(2014,2015,2013)
+
+select distinct e.MemberID, e.Year,m.LastName, m.FirstName
+from Entry e
+Inner JOIN Member m ON e.MemberID=m.MemberID 
+where e.MemberID IN(select distinct d.MemberID from IDs d
+group by d.MemberID
+having count(*)=3)
+order by e.MemberID, e.Year;
